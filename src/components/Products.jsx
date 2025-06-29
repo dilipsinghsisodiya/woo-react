@@ -1,0 +1,59 @@
+import React, { useEffect, useState } from 'react'
+import ProductCard from './ProductCard'
+
+const Products = ({ productURL, productImg, productName, productPrice, productStock }) => {
+
+  const consumerKey = import.meta.env.VITE_CK;
+  const consumerSecret = import.meta.env.VITE_CS;
+  const websiteURL = "https://coral-chough-451794.hostingersite.com";
+  const getproducts = "products";
+
+  const wooURL = `${websiteURL}/wp-json/wc/v3/${getproducts}?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
+
+  const [data, setData] = useState([]);
+
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(wooURL);
+        const result = await res.json();
+        console.log(result);
+
+        setData(result);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  return (
+    <>
+
+      <div className="bg-white">
+        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <h2 className="sr-only">Products</h2>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+
+            {data.map((product) => (
+              <ProductCard
+                key={product.id}
+                productURL= {`/product/${product.id}`}
+                productName={product.name}
+                productPrice={product.price}
+                productImg={product.images?.[0]?.src}
+                productDesc={product.description.replace(/<[^>]+>/g, "")}
+                productStock={product.stock_status}                
+
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default Products
+
