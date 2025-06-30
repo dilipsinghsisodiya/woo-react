@@ -7,7 +7,6 @@ import Contact from './pages/Contact'
 import PageNotFound from './pages/PageNotFound';
 import ProductDetails from './pages/ProductDetails';
 
-
 const App = () => {
   return (
     <>
@@ -17,7 +16,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/shop' element={<Shop />} />
-        <Route path='/product/:id' element={<ProductDetails />} />
+        <Route path='/product/:slug' element={<ProductDetails />} />
       </Routes>
     </>
   )

@@ -6,9 +6,8 @@ const Products = ({ productURL, productImg, productName, productPrice, productSt
   const consumerKey = import.meta.env.VITE_CK;
   const consumerSecret = import.meta.env.VITE_CS;
   const websiteURL = "https://coral-chough-451794.hostingersite.com";
-  const getproducts = "products";
 
-  const wooURL = `${websiteURL}/wp-json/wc/v3/${getproducts}?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
+  const wooURL = `${websiteURL}/wp-json/wc/v3/products?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
 
   const [data, setData] = useState([]);
 
@@ -39,7 +38,7 @@ const Products = ({ productURL, productImg, productName, productPrice, productSt
             {data.map((product) => (
               <ProductCard
                 key={product.id}
-                productURL= {`/product/${product.id}`}
+                productURL= {`/product/${product.slug}`}
                 productName={product.name}
                 productPrice={product.price}
                 productImg={product.images?.[0]?.src}
