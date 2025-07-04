@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
+import { CartContext } from "../Context/CartContext";
 
 const ProductDetails = () => {
   const { slug } = useParams();
+  const { addToCart } = useContext(CartContext);
 
   const consumerKey = import.meta.env.VITE_CK;
   const consumerSecret = import.meta.env.VITE_CS;
@@ -11,6 +13,10 @@ const ProductDetails = () => {
   const wooURL = `${websiteURL}/wp-json/wc/v3/products?slug=${slug}&consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
 
   const [productData, setProductData] = useState({});
+
+    useEffect(() => {
+    fetchProductDetails();
+  }, [slug]);
 
   const fetchProductDetails = async () => {
     try {
@@ -23,9 +29,7 @@ const ProductDetails = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProductDetails();
-  }, [slug]);
+
 
   return (
     <>
@@ -54,14 +58,23 @@ const ProductDetails = () => {
               </p>
             )}
           </span>
+          <Link to="/cart">
+            <button
+              onClick={() => {
+                addToCart(productData)
+              }
+            }
+              className="mt-6 bg-black hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded transition duration-200"
+            >
+              ADD TO CART
+            </button>
+          </Link>
         </div>
       </div>
 
       <div className="mx-auto mt-6 mb-12 max-w-2xl sm:px-6 lg:grid lg:max-w-5xl lg:grid-cols-1 lg:gap-2 lg:px-8">
         <h1 className="mt-6 text-lg font-medium text-gray-900">Description:</h1>
-        <p>
-          {productData.description?.replace(/<[^>]+>/g, "")}
-        </p>
+        <p>{productData.description?.replace(/<[^>]+>/g, "")}</p>
       </div>
     </>
   );

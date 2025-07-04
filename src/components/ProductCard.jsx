@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const ProductCard = ({ productURL, productImg, productName, productPrice, productStock }) => {
+const ProductCard = ({ productURL, productImg, productName, productPrice, productStock, productAddToCart, product }) => {
   return (
     <>
-      <Link to={productURL} className="group">
+      
+      <div className='grid grid-cols-1 gap-4'>
+        <Link to={productURL} className="group">
         <img
           alt={productName}
           src={productImg}
@@ -19,6 +21,18 @@ const ProductCard = ({ productURL, productImg, productName, productPrice, produc
             <p className="mt-1 text-lg font-medium text-gray-900">Out of Stock</p>
         }
       </Link>
+
+        <button
+              onClick={() => {
+                productAddToCart(product)
+              }
+            }
+              className="mt-6 bg-black hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded transition duration-200"
+            >
+              ADD TO CART
+            </button>
+      </div>
+            
     </>
   )
 }

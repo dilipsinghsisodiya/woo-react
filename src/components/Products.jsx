@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProductCard from './ProductCard'
+import { CartContext } from "../Context/CartContext";
 
-const Products = ({ productURL, productImg, productName, productPrice, productStock }) => {
+
+const Products = () => {
+
+  const { addToCart } = useContext(CartContext);
+
 
   const consumerKey = import.meta.env.VITE_CK;
   const consumerSecret = import.meta.env.VITE_CS;
@@ -43,7 +48,9 @@ const Products = ({ productURL, productImg, productName, productPrice, productSt
                 productPrice={product.price}
                 productImg={product.images?.[0]?.src}
                 productDesc={product.description.replace(/<[^>]+>/g, "")}
-                productStock={product.stock_status}                
+                productStock={product.stock_status} 
+                product = {product}
+                productAddToCart = {addToCart}               
 
               />
             ))}
