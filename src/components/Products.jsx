@@ -6,6 +6,8 @@ import { CartContext } from "../Context/CartContext";
 const Products = () => {
 
   const { addToCart } = useContext(CartContext);
+  const [loading, setLoading] = useState(false);
+
 
 
   const consumerKey = import.meta.env.VITE_CK;
@@ -17,6 +19,7 @@ const Products = () => {
   const [data, setData] = useState([]);
 
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const res = await fetch(wooURL);
         const result = await res.json();
@@ -25,6 +28,8 @@ const Products = () => {
         setData(result);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,8 +39,11 @@ const Products = () => {
 
   return (
     <>
-
-      <div className="bg-white">
+    {
+      loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
           <h2 className="sr-only">Products</h2>
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
@@ -57,6 +65,8 @@ const Products = () => {
           </div>
         </div>
       </div>
+      )
+    }      
     </>
   )
 }
