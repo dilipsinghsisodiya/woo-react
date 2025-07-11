@@ -8,11 +8,14 @@ import PageNotFound from "./pages/PageNotFound";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import { CartProvider } from "./Context/CartContext";
+import { AuthProvider } from "./Context/AuthContext";
 import Checkout from "./pages/Checkout";
+import Account from "./pages/Account";
 
 const App = () => {
   return (
     <>
+    <AuthProvider>
       <CartProvider>
         <Header />
         <Routes>
@@ -21,10 +24,12 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:slug" element={<ProductDetails />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </CartProvider>
+      </AuthProvider>
     </>
   );
 };

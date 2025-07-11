@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { CartContext } from "../Context/CartContext";
+import Loader from "../components/Loader"
 
 const ProductDetails = () => {
   const { slug } = useParams();
@@ -36,7 +37,7 @@ const ProductDetails = () => {
   return (
     <>
       {loading ? (
-        <h1>Loading...</h1>
+        <Loader />
       ) : (
         <>
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-5xl lg:grid-cols-2 lg:gap-8 lg:px-8 p-5">
