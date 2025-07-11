@@ -11,6 +11,7 @@ import { CartProvider } from "./Context/CartContext";
 import { AuthProvider } from "./Context/AuthContext";
 import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
         </Routes>
+        <Footer />
       </CartProvider>
       </AuthProvider>
     </>

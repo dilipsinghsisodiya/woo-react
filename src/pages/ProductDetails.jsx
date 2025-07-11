@@ -25,7 +25,6 @@ const ProductDetails = () => {
     try {
       const res = await fetch(wooURL);
       const result = await res.json();
-      console.log(result);
       setProductData(result[0]);
     } catch (err) {
       console.log(err);

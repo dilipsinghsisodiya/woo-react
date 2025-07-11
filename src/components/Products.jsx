@@ -20,7 +20,6 @@ const Products = () => {
     try {
       const res = await fetch(wooURL);
       const result = await res.json();
-      console.log(result);
 
       setData(result);
     } catch (err) {

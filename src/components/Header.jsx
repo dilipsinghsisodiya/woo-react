@@ -1,6 +1,7 @@
 "use client";
 import { CartContext } from "../Context/CartContext";
-import { Fragment, useState, useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { Fragment, useState, useContext } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -22,7 +23,6 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 const navigation = {
   categories: [
