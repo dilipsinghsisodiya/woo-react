@@ -1,6 +1,6 @@
 "use client";
 import { CartContext } from "../Context/CartContext";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../Context/AuthContext";
 import { Fragment, useState, useContext } from "react";
 import {
   Dialog,
