@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../Context/AuthContext";
 
 // --- Icon Components for a clean, modern UI ---
 const UserIcon = () => (
