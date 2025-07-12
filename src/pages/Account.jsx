@@ -91,56 +91,74 @@ const Account = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   // --- Combined Login/Register Handler ---
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    try {
-      if (isRegister) {
-        const response = await fetch(
-          `${siteUrl}/wp-json/wc/v3/customers?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: formData.email,
-              username: formData.username,
-              password: formData.password,
-              first_name: formData.name,
-            }),
-          }
-        );
-        const data = await response.json();
-        if (!response.ok)
-          throw new Error(data.message || "Registration failed.");
-        setMessage("🎉 Registration successful! Please log in.");
-        setIsRegister(false);
-      } else {
-        const res = await fetch(`${siteUrl}/wp-json/jwt-auth/v1/token`, {
+  // ✅ Username & Password validation using regex
+  const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{8,}$/;
+
+  if (!usernameRegex.test(formData.username)) {
+    setMessage("❗ Username must be 3-20 characters, alphanumeric or underscores only.");
+    setLoading(false);
+    return;
+  }
+
+  if (!passwordRegex.test(formData.password)) {
+    setMessage(
+      "❗ Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character."
+    );
+    setLoading(false);
+    return;
+  }
+
+  try {
+    if (isRegister) {
+      const response = await fetch(
+        `${siteUrl}/wp-json/wc/v3/customers?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`,
+        {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            email: formData.email,
             username: formData.username,
             password: formData.password,
+            first_name: formData.name,
           }),
-        });
-        const data = await res.json();
-        if (!res.ok || !data.token)
-          throw new Error(data.message || "Login failed.");
-        const customerRes = await fetch(
-          `${siteUrl}/wp-json/wc/v3/customers?email=${data.user_email}&consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`
-        );
-        const customers = await customerRes.json();
-        if (!customers.length) throw new Error("Customer account not found.");
-        login(customers[0], data.token);
-      }
-    } catch (err) {
-      setMessage(err.message);
-    } finally {
-      setLoading(false);
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Registration failed.");
+      setMessage("🎉 Registration successful! Please log in.");
+      setIsRegister(false);
+    } else {
+      const res = await fetch(`${siteUrl}/wp-json/jwt-auth/v1/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.token) throw new Error(data.message || "Login failed.");
+
+      const customerRes = await fetch(
+        `${siteUrl}/wp-json/wc/v3/customers?email=${data.user_email}&consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`
+      );
+      const customers = await customerRes.json();
+      if (!customers.length) throw new Error("Customer account not found.");
+      login(customers[0], data.token);
     }
-  };
+  } catch (err) {
+    setMessage(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const fetchOrders = async () => {
     if (!user?.id) return;
