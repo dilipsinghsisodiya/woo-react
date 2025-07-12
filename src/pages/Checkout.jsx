@@ -2,14 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Context/CartContext";
 
-
-
 const Checkout = () => {
   const navigate = useNavigate();
   const { cartItems, clearCart } = useContext(CartContext); 
   const [orderPlaced, setOrderPlaced] = useState(false);
-
-
 
   const [user, setUser] = useState(null);
   const [billing, setBilling] = useState({
@@ -21,6 +17,9 @@ const Checkout = () => {
     zip: "",
   });
 
+  // ZIP code regex: 4 to 10 digits
+  const zipRegex = /^[0-9]{4,10}$/;
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
@@ -28,7 +27,7 @@ const Checkout = () => {
       return;
     }
 
-if (cartItems.length === 0 && !orderPlaced) {
+    if (cartItems.length === 0 && !orderPlaced) {
       navigate("/cart");
       return;
     }
@@ -36,9 +35,6 @@ if (cartItems.length === 0 && !orderPlaced) {
     const parsedUser = JSON.parse(storedUser);
     setUser(parsedUser);
 
-    
-
-    // Prefill billing fields
     setBilling((prev) => ({
       ...prev,
       firstName: parsedUser.first_name || "",
@@ -60,6 +56,10 @@ if (cartItems.length === 0 && !orderPlaced) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!zipRegex.test(billing.zip)) {
+      alert("❌ ZIP code must be 4 to 10 digits.");
+      return;
+    }
 
     if (!user?.id || isNaN(user.id)) {
       alert("❌ Invalid user. Please log in again.");
